@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "138065492998",
+    "project_id": "halalify-dc455",
+    "storage_bucket": "halalify-dc455.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138065492998:android:c10e507c52d9732f419787",
+        "android_client_info": {
+          "package_name": "com.example.halalify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBniOyb2lgsA91xuRGP7G164I39r3C4n3U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
