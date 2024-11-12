@@ -4,6 +4,7 @@ barcodeScanning = "17.3.0"
 cameraViewVersion = "1.4.0"
 firebaseBom = "33.5.1"
 firebaseFirestore = "25.1.1"
+firebaseStorage = "21.0.1"
 firebaseUiAuth = "7.2.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -29,6 +30,7 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuthKtx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firebaseFirestore" }
+firebase-storage = { module = "com.google.firebase:firebase-storage", version.ref = "firebaseStorage" }
 firebase-ui-auth = { module = "com.firebaseui:firebase-ui-auth", version.ref = "firebaseUiAuth" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

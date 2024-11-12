@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation (libs.firebase.ui.auth)
     implementation (libs.firebase.firestore)
+    implementation (libs.firebase.storage)
     implementation (libs.androidx.camera.camera2)
     implementation (libs.androidx.camera.lifecycle)
     implementation (libs.androidx.camera.view.v140)
