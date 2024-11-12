@@ -7,41 +7,29 @@
     android:layout_height="match_parent"
     tools:context=".ScanFragment">
 
+    <androidx.camera.view.PreviewView
+        android:id="@+id/viewFinder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="299dp"
-        android:layout_height="30dp"
-        android:text="Live camera for scanning barcode"
-        android:textColor="@color/black"
+    <Button
+        android:id="@+id/image_capture_button"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="50dp"
+        android:elevation="2dp"
+        android:text="@string/take_photo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.858"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.268" />
+        app:layout_constraintLeft_toLeftOf="parent" />
 
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="208dp"
-        android:layout_height="196dp"
-        android:src="@android:drawable/ic_menu_camera"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.475"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.414" />
-
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="?android:attr/progressBarStyle"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_centerline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton2"
-        app:layout_constraintVertical_bias="0.036" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".50" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
