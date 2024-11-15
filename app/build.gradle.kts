@@ -77,5 +77,14 @@ dependencies {
     implementation (libs.androidx.camera.view.v140)
     implementation (libs.barcode.scanning)
     implementation (libs.androidx.lifecycle.runtime.ktx)
+    implementation (libs.barcode.scanning.v1700)
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.logging.interceptor)
+
+    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation (libs.glide)
+
+
 
 }

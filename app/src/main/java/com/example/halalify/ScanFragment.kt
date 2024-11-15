@@ -1,6 +1,7 @@
 package com.example.halalify
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -20,6 +21,9 @@ import androidx.fragment.app.Fragment
 import com.example.halalify.databinding.FragmentScanBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.common.InputImage
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -95,36 +99,57 @@ class ScanFragment : Fragment() {
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    saveImageToFirestore(photoFile) // Directly save image data to Firestore
+                    analyzeBarcode(photoFile)
                 }
             }
         )
     }
-    private fun saveImageToFirestore(file: File) {
-        val base64Image = imageToBase64(file)
+
+    private fun analyzeBarcode(file: File) {
+        val inputImage = InputImage.fromFilePath(requireContext(), Uri.fromFile(file))
+        val scanner = BarcodeScanning.getClient()
+
+        scanner.process(inputImage)
+            .addOnSuccessListener { barcodes ->
+                for (barcode in barcodes) {
+                    when (barcode.valueType) {
+                        Barcode.TYPE_PRODUCT -> {
+                            val rawValue = barcode.rawValue
+                            Log.d(TAG, "Barcode detected: $rawValue")
+                            Toast.makeText(requireContext(), "Product Barcode: $rawValue", Toast.LENGTH_SHORT).show()
+                            saveBarcodeToFirestore(rawValue)
+                        }
+                        else -> {
+                            Log.d(TAG, "Other barcode type detected")
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Barcode detection failed: ${e.message}", e)
+                Toast.makeText(requireContext(), "No barcode found", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun saveBarcodeToFirestore(barcodeValue: String?) {
         val data = hashMapOf(
-            "imageData" to base64Image,
+            "barcode" to barcodeValue,
             "timestamp" to System.currentTimeMillis()
         )
 
-        firestore.collection("images").add(data)
+        firestore.collection("barcodes").add(data)
             .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Image saved", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Barcode saved", Toast.LENGTH_SHORT).show()
+
+                // Pass the barcode to scannedproductresult directly
+                val intent = Intent(requireContext(), scannedproductresult::class.java)
+                intent.putExtra("barcode", barcodeValue)
+                startActivity(intent)
             }
             .addOnFailureListener { e ->
-                Log.e(TAG, "Failed to save image: ${e.message}", e)
+                Log.e(TAG, "Failed to save barcode: ${e.message}", e)
             }
     }
-
-
-    private fun imageToBase64(file: File): String {
-        val bytes = file.readBytes()
-        return android.util.Base64.encodeToString(bytes, android.util.Base64.DEFAULT)
-    }
-
-
-
-
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
