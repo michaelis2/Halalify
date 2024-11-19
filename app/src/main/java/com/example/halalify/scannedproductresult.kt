@@ -1,5 +1,6 @@
 package com.example.halalify
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -23,6 +24,7 @@ class scannedproductresult : AppCompatActivity() {
     private lateinit var foodCategory: TextView
     private lateinit var halalStatus: TextView
     private lateinit var ingredientsList: TextView
+    private var fullIngredientsList: List<String> = emptyList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +39,16 @@ class scannedproductresult : AppCompatActivity() {
         foodCategory = findViewById(R.id.textView18)
         halalStatus = findViewById(R.id.textView19)
         ingredientsList = findViewById(R.id.textView21)
+        val seeIngredientsButton = findViewById<Button>(R.id.button7)
+        seeIngredientsButton.setOnClickListener {
+            val fullIngredientsText = fullIngredientsList.joinToString("\n")
+
+            // Create an intent to open the ingredient list activity
+            val intent = Intent(this, ingredientlist::class.java)
+
+            // Pass the ingredients data to the new activity
+            intent.putExtra("ingredients", fullIngredientsText)
+            startActivity(intent)}
 
         // Retrieve barcode from Intent extras
         val barcode = intent.getStringExtra("barcode")
@@ -56,7 +68,8 @@ class scannedproductresult : AppCompatActivity() {
             finish()
         }
         // Retrieve and display the latest scanned barcode information
-       // getLatestBarcodeAndFetchProductInfo()
+        // getLatestBarcodeAndFetchProductInfo()
+
     }
 
 
@@ -80,13 +93,11 @@ class scannedproductresult : AppCompatActivity() {
 
                     // Check if product exists
                     if (!jsonObject.has("product")) {
-                        // Product not found, show a dialog
                         runOnUiThread {
                             AlertDialog.Builder(this@scannedproductresult)
                                 .setTitle("Product Unavailable")
                                 .setMessage("Food product unavailable")
                                 .setPositiveButton("OK") { _, _ ->
-                                    // Close this activity to go back to the previous screen
                                     finish()
                                 }
                                 .setCancelable(false)
@@ -100,16 +111,61 @@ class scannedproductresult : AppCompatActivity() {
                     // Parse product data
                     val name = product.optString("product_name", "N/A")
                     val category = product.optJSONArray("categories_tags")?.optString(0) ?: "N/A"
-                    val ingredients = product.optString("ingredients_text", "No ingredients")
-                    val imageUrl = product.optString("image_url", "")
-                    val halalStatusText = if (ingredients.contains("halal", true)) "Halal" else "Not Halal"
+
+                    // Handle ingredients array
+                    val ingredientsArray = product.optJSONArray("ingredients")
+                    val ingredients = if (ingredientsArray != null && ingredientsArray.length() > 0) {
+                        val list = mutableListOf<String>()
+                        for (i in 0 until ingredientsArray.length()) {
+                            val ingredientObject = ingredientsArray.getJSONObject(i)
+                            val ingredientName = ingredientObject.optString("text", "Unknown Ingredient")
+                            list.add(ingredientName)
+                        }
+                        list
+                    } else {
+                        emptyList()
+                    }
+
+                    // Determine halal status
+                    val halalStatusText = if (ingredients.any { it.contains("halal", true) }) "Halal" else "Not Halal"
 
                     // Update UI on main thread
                     runOnUiThread {
                         foodName.text = name
                         foodCategory.text = category
                         halalStatus.text = halalStatusText
-                        ingredientsList.text = "Ingredients: $ingredients"
+
+                        val ingredient1TextView = findViewById<TextView>(R.id.textView22)
+                        val ingredient2TextView = findViewById<TextView>(R.id.textView23)
+
+                        if (ingredients.isEmpty()) {
+                            // Hide ingredient TextViews if no ingredients found
+                            ingredient1TextView.visibility = TextView.GONE
+                            ingredient2TextView.visibility = TextView.GONE
+                            ingredientsList.text = "No ingredients found"
+                        } else {
+                            // Display "Ingredients:" in its own TextView
+                            ingredientsList.text = "Ingredients:"
+                            fullIngredientsList = ingredients
+
+                            // Display first ingredient or hide if not available
+                            if (ingredients.size > 0) {
+                                ingredient1TextView.text = ingredients[0]
+                                ingredient1TextView.visibility = TextView.VISIBLE
+                            } else {
+                                ingredient1TextView.visibility = TextView.GONE
+                            }
+
+                            // Display second ingredient or hide if not available
+                            if (ingredients.size > 1) {
+                                ingredient2TextView.text = ingredients[1]
+                                ingredient2TextView.visibility = TextView.VISIBLE
+                            } else {
+                                ingredient2TextView.visibility = TextView.GONE
+                            }
+                        }
+
+                        val imageUrl = product.optString("image_url", "")
                         if (imageUrl.isNotEmpty()) {
                             Glide.with(this@scannedproductresult)
                                 .load(imageUrl)
@@ -120,5 +176,7 @@ class scannedproductresult : AppCompatActivity() {
             }
         })
     }
+
+
 
 }
