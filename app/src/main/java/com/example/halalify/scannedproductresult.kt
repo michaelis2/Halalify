@@ -1,5 +1,6 @@
 package com.example.halalify
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -23,6 +24,7 @@ class scannedproductresult : AppCompatActivity() {
     private lateinit var foodCategory: TextView
     private lateinit var halalStatus: TextView
     private lateinit var ingredientsList: TextView
+    private var fullIngredientsList: List<String> = emptyList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +39,14 @@ class scannedproductresult : AppCompatActivity() {
         foodCategory = findViewById(R.id.textView18)
         halalStatus = findViewById(R.id.textView19)
         ingredientsList = findViewById(R.id.textView21)
+        val seeIngredientsButton = findViewById<Button>(R.id.button7)
+        seeIngredientsButton.setOnClickListener {
+            val fullData = fullIngredientsList.joinToString("\n")
+            val intent = Intent(this, ingredientlist::class.java)
+            intent.putExtra("ingredients", fullData)
+            startActivity(intent)
+        }
+
 
         // Retrieve barcode from Intent extras
         val barcode = intent.getStringExtra("barcode")
@@ -56,7 +66,8 @@ class scannedproductresult : AppCompatActivity() {
             finish()
         }
         // Retrieve and display the latest scanned barcode information
-       // getLatestBarcodeAndFetchProductInfo()
+        // getLatestBarcodeAndFetchProductInfo()
+
     }
 
 
@@ -78,15 +89,12 @@ class scannedproductresult : AppCompatActivity() {
                     val jsonData = responseBody.string()
                     val jsonObject = JSONObject(jsonData)
 
-                    // Check if product exists
                     if (!jsonObject.has("product")) {
-                        // Product not found, show a dialog
                         runOnUiThread {
                             AlertDialog.Builder(this@scannedproductresult)
                                 .setTitle("Product Unavailable")
                                 .setMessage("Food product unavailable")
                                 .setPositiveButton("OK") { _, _ ->
-                                    // Close this activity to go back to the previous screen
                                     finish()
                                 }
                                 .setCancelable(false)
@@ -97,19 +105,68 @@ class scannedproductresult : AppCompatActivity() {
 
                     val product = jsonObject.getJSONObject("product")
 
-                    // Parse product data
                     val name = product.optString("product_name", "N/A")
                     val category = product.optJSONArray("categories_tags")?.optString(0) ?: "N/A"
-                    val ingredients = product.optString("ingredients_text", "No ingredients")
-                    val imageUrl = product.optString("image_url", "")
-                    val halalStatusText = if (ingredients.contains("halal", true)) "Halal" else "Not Halal"
 
-                    // Update UI on main thread
+                    // Ingredients parsing
+                    val ingredientsArray = product.optJSONArray("ingredients")
+                    val ingredients = if (ingredientsArray != null && ingredientsArray.length() > 0) {
+                        val list = mutableListOf<String>()
+                        for (i in 0 until ingredientsArray.length()) {
+                            val ingredientObject = ingredientsArray.getJSONObject(i)
+                            val ingredientName = ingredientObject.optString("text", "Unknown Ingredient")
+                            list.add(ingredientName)
+                        }
+                        list
+                    } else {
+                        emptyList()
+                    }
+
+                    // Nutritional information parsing
+                    val nutriments = product.optJSONObject("nutriments")
+                    val nutritionInfo = mutableListOf<String>()
+                    nutriments?.let {
+                        val protein = it.optString("proteins_100g", "Unknown") + "g protein"
+                        val carbs = it.optString("carbohydrates_100g", "Unknown") + "g carbs"
+                        val fats = it.optString("fat_100g", "Unknown") + "g fat"
+                        val energy = it.optString("energy-kcal_100g", "Unknown") + " kcal energy"
+
+                        nutritionInfo.addAll(listOf(protein, carbs, fats, energy))
+                    }
+
+                    val halalStatusText = if (ingredients.any { it.contains("halal", true) }) "Halal" else "Not Halal"
+
                     runOnUiThread {
                         foodName.text = name
                         foodCategory.text = category
                         halalStatus.text = halalStatusText
-                        ingredientsList.text = "Ingredients: $ingredients"
+
+                        fullIngredientsList = ingredients + nutritionInfo // Combine ingredients and nutritional info
+
+                        val ingredient1TextView = findViewById<TextView>(R.id.textView22)
+                        val ingredient2TextView = findViewById<TextView>(R.id.textView23)
+
+                        if (fullIngredientsList.isEmpty()) {
+                            ingredient1TextView.visibility = TextView.GONE
+                            ingredient2TextView.visibility = TextView.GONE
+                            ingredientsList.text = "No data found"
+                        } else {
+                            ingredientsList.text = "Ingredients and Nutrition Info:"
+                            if (fullIngredientsList.size > 0) {
+                                ingredient1TextView.text = fullIngredientsList[0]
+                                ingredient1TextView.visibility = TextView.VISIBLE
+                            } else {
+                                ingredient1TextView.visibility = TextView.GONE
+                            }
+                            if (fullIngredientsList.size > 1) {
+                                ingredient2TextView.text = fullIngredientsList[1]
+                                ingredient2TextView.visibility = TextView.VISIBLE
+                            } else {
+                                ingredient2TextView.visibility = TextView.GONE
+                            }
+                        }
+
+                        val imageUrl = product.optString("image_url", "")
                         if (imageUrl.isNotEmpty()) {
                             Glide.with(this@scannedproductresult)
                                 .load(imageUrl)
@@ -120,5 +177,8 @@ class scannedproductresult : AppCompatActivity() {
             }
         })
     }
+
+
+
 
 }
