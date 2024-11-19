@@ -24,6 +24,7 @@ class scannedproductresult : AppCompatActivity() {
     private lateinit var foodCategory: TextView
     private lateinit var halalStatus: TextView
     private lateinit var ingredientsList: TextView
+    private lateinit var calorieDisplay: TextView
     private var fullIngredientsList: List<String> = emptyList()
 
 
@@ -39,6 +40,9 @@ class scannedproductresult : AppCompatActivity() {
         foodCategory = findViewById(R.id.textView18)
         halalStatus = findViewById(R.id.textView19)
         ingredientsList = findViewById(R.id.textView21)
+        calorieDisplay = findViewById(R.id.calorydisplay)
+
+
         val seeIngredientsButton = findViewById<Button>(R.id.button7)
         seeIngredientsButton.setOnClickListener {
             val fullData = fullIngredientsList.joinToString("\n")
@@ -124,6 +128,8 @@ class scannedproductresult : AppCompatActivity() {
 
                     // Nutritional information parsing
                     val nutriments = product.optJSONObject("nutriments")
+                    val calorieInfo = nutriments?.optString("energy-kcal_100g", "No calorie info available") ?: "No calorie info available"
+
                     val nutritionInfo = mutableListOf<String>()
                     nutriments?.let {
                         val protein = it.optString("proteins_100g", "Unknown") + "g protein"
@@ -140,8 +146,8 @@ class scannedproductresult : AppCompatActivity() {
                         foodName.text = name
                         foodCategory.text = category
                         halalStatus.text = halalStatusText
-
                         fullIngredientsList = ingredients + nutritionInfo // Combine ingredients and nutritional info
+                        calorieDisplay.text = "Calories: $calorieInfo"
 
                         val ingredient1TextView = findViewById<TextView>(R.id.textView22)
                         val ingredient2TextView = findViewById<TextView>(R.id.textView23)
