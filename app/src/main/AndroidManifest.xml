@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
 
     <application
         android:allowBackup="true"
@@ -34,7 +39,8 @@
             android:exported="false" />
         <activity
             android:name=".scannedproductresult"
-            android:exported="false" />
+            android:exported="false">
+        </activity>
         <activity
             android:name=".GetStarted"
             android:exported="true">
@@ -49,7 +55,10 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+
+        </activity>
+
     </application>
 
 </manifest>
