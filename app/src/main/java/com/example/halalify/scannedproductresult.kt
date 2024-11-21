@@ -29,7 +29,7 @@ class scannedproductresult : AppCompatActivity() {
     private lateinit var ingredientsList: TextView
     private lateinit var calorieDisplay: TextView
     private var fullIngredientsList: List<String> = emptyList()
-    private lateinit var firestore: FirebaseFirestore
+    private val firestore = FirebaseFirestore.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -156,6 +156,8 @@ class scannedproductresult : AppCompatActivity() {
                         val energy = it.optString("energy-kcal_100g", "Unknown") + " kcal energy"
 
                         nutritionInfo.addAll(listOf(protein, carbs, fats, energy))
+
+
                     }
 
 
@@ -196,15 +198,9 @@ class scannedproductresult : AppCompatActivity() {
                                 .load(imageUrl)
                                 .into(imageOfFood)
                         }
+                        saveFoodDataToFirestore(barcode, name, category, ingredients, halalStatusText, calorieInfo)
 
-                        saveFoodDataToFirestore(
-                            barcode,
-                            name,
-                            category,
-                            ingredients,
-                            halalStatusText,
-                            calorieInfo
-                        )
+
                     }
                 }
             }
