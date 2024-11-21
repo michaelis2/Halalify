@@ -16,6 +16,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class scannedproductresult : AppCompatActivity() {
 
@@ -26,6 +29,7 @@ class scannedproductresult : AppCompatActivity() {
     private lateinit var ingredientsList: TextView
     private lateinit var calorieDisplay: TextView
     private var fullIngredientsList: List<String> = emptyList()
+    private lateinit var firestore: FirebaseFirestore
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +79,6 @@ class scannedproductresult : AppCompatActivity() {
     }
 
 
-
     private fun fetchProductInfoFromAPI(barcode: String) {
         val url = "https://world.openfoodfacts.org/api/v0/product/$barcode.json"
         val client = OkHttpClient()
@@ -84,7 +87,11 @@ class scannedproductresult : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    Toast.makeText(this@scannedproductresult, "Failed to fetch product info", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@scannedproductresult,
+                        "Failed to fetch product info",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
@@ -114,21 +121,32 @@ class scannedproductresult : AppCompatActivity() {
 
                     // Ingredients parsing
                     val ingredientsArray = product.optJSONArray("ingredients")
-                    val ingredients = if (ingredientsArray != null && ingredientsArray.length() > 0) {
-                        val list = mutableListOf<String>()
-                        for (i in 0 until ingredientsArray.length()) {
-                            val ingredientObject = ingredientsArray.getJSONObject(i)
-                            val ingredientName = ingredientObject.optString("text", "Unknown Ingredient")
-                            list.add(ingredientName)
+                    val ingredients =
+                        if (ingredientsArray != null && ingredientsArray.length() > 0) {
+                            val list = mutableListOf<String>()
+                            for (i in 0 until ingredientsArray.length()) {
+                                val ingredientObject = ingredientsArray.getJSONObject(i)
+                                val ingredientName =
+                                    ingredientObject.optString("text", "Unknown Ingredient")
+                                list.add(ingredientName)
+                            }
+                            list
+                        } else {
+                            emptyList()
                         }
-                        list
-                    } else {
-                        emptyList()
-                    }
 
+                    // Check for haram ingredients
+                    // val containsHaram = HaramIngredientsUtility.checkHaramStatus(ingredients)
+                    val halalStatusText = when {
+                        ingredients.isEmpty() -> "Unknown" // No ingredients available
+                        HaramIngredientsUtility.checkHaramStatus(ingredients) -> "Haram"
+                        else -> "Halal"
+                    }
                     // Nutritional information parsing
                     val nutriments = product.optJSONObject("nutriments")
-                    val calorieInfo = nutriments?.optString("energy-kcal_100g", "No calorie info available") ?: "No calorie info available"
+                    val calorieInfo =
+                        nutriments?.optString("energy-kcal_100g", "No calorie info available")
+                            ?: "No calorie info available"
 
                     val nutritionInfo = mutableListOf<String>()
                     nutriments?.let {
@@ -140,13 +158,13 @@ class scannedproductresult : AppCompatActivity() {
                         nutritionInfo.addAll(listOf(protein, carbs, fats, energy))
                     }
 
-                    val halalStatusText = if (ingredients.any { it.contains("halal", true) }) "Halal" else "Not Halal"
 
                     runOnUiThread {
                         foodName.text = name
                         foodCategory.text = category
                         halalStatus.text = halalStatusText
-                        fullIngredientsList = ingredients + nutritionInfo // Combine ingredients and nutritional info
+                        fullIngredientsList =
+                            ingredients + nutritionInfo // Combine ingredients and nutritional info
                         calorieDisplay.text = "Calories: $calorieInfo"
 
                         val ingredient1TextView = findViewById<TextView>(R.id.textView22)
@@ -178,13 +196,52 @@ class scannedproductresult : AppCompatActivity() {
                                 .load(imageUrl)
                                 .into(imageOfFood)
                         }
+
+                        saveFoodDataToFirestore(
+                            barcode,
+                            name,
+                            category,
+                            ingredients,
+                            halalStatusText,
+                            calorieInfo
+                        )
                     }
                 }
             }
+
         })
+
     }
 
-
-
+    private fun saveFoodDataToFirestore(
+        barcode: String,
+        name: String,
+        category: String,
+        ingredients: List<String>,
+        halalStatus: String,
+        calories: String
+    ) {
+        val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(
+            Date()
+        )
+        val foodData = hashMapOf(
+            "barcode" to barcode,
+            "name" to name,
+            "category" to category,
+            "ingredients" to ingredients,
+            "halalStatus" to halalStatus,
+            "calories" to calories,
+            "timestamp" to timestamp
+        )
+        firestore.collection("foodData")
+            .add(foodData)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Food data saved successfully", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to save data: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
 
 }
+
