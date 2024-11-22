@@ -3,6 +3,7 @@ package com.example.halalify
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -30,7 +31,7 @@ class scannedproductresult : AppCompatActivity() {
     private lateinit var calorieDisplay: TextView
     private var fullIngredientsList: List<String> = emptyList()
     private val firestore = FirebaseFirestore.getInstance()
-
+    private var shouldSaveCalories = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,16 @@ class scannedproductresult : AppCompatActivity() {
         halalStatus = findViewById(R.id.textView19)
         ingredientsList = findViewById(R.id.textView21)
         calorieDisplay = findViewById(R.id.calorydisplay)
+
+
+        val calorieHistoryButton = findViewById<ImageButton>(R.id.addcalorieshistory)
+        calorieHistoryButton.setOnClickListener {
+            val intent = Intent(this, caloriehistory::class.java)
+            shouldSaveCalories = true // Set flag when the button is clicked
+            saveCalorieDataToFirestore() // Save calories to "calorie history"
+            Toast.makeText(this, "Calories added to history", Toast.LENGTH_SHORT).show()
+            startActivity(intent)
+        }
 
 
         val seeIngredientsButton = findViewById<Button>(R.id.button7)
@@ -198,7 +209,14 @@ class scannedproductresult : AppCompatActivity() {
                                 .load(imageUrl)
                                 .into(imageOfFood)
                         }
-                        saveFoodDataToFirestore(barcode, name, category, ingredients, halalStatusText, calorieInfo)
+                        saveFoodDataToFirestore(
+                            barcode,
+                            name,
+                            category,
+                            ingredients,
+                            halalStatusText,
+                            calorieInfo
+                        )
 
 
                     }
@@ -217,7 +235,7 @@ class scannedproductresult : AppCompatActivity() {
         halalStatus: String,
         calories: String
     ) {
-        val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(
+        val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
             Date()
         )
         val foodData = hashMapOf(
@@ -238,6 +256,42 @@ class scannedproductresult : AppCompatActivity() {
                 Toast.makeText(this, "Failed to save data: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
+    private fun saveCalorieDataToFirestore() {
+        if (calorieDisplay.text.isNotEmpty() && foodName.text.isNotEmpty()) {
+            val calorieText = calorieDisplay.text.toString()
+
+            // Extract the numeric calorie value from the string
+            val numericCalories = calorieText.replace(Regex("[^\\d]"), "").toIntOrNull()
+
+            if (numericCalories != null) {
+                val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+                val calorieData = hashMapOf(
+                    "name" to foodName.text.toString(),
+                    "calories" to numericCalories, // Store as an integer
+                    "timestamp" to timestamp
+                )
+
+                firestore.collection("calorieHistory")
+                    .add(calorieData)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Calorie data saved successfully", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(
+                            this,
+                            "Failed to save calorie data: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            } else {
+                Toast.makeText(this, "Invalid calorie data", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
 }
 
