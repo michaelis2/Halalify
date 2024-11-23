@@ -95,10 +95,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="see more"
-            app:layout_constraintEnd_toEndOf="@+id/searchimagebutton"
+            app:layout_constraintEnd_toEndOf="@+id/searchbutton"
             app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintStart_toEndOf="@+id/Scannedfoodhistory"
-            app:layout_constraintTop_toBottomOf="@+id/searchimagebutton" />
+            app:layout_constraintTop_toBottomOf="@+id/searchbutton" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditText"
@@ -112,7 +112,7 @@
             app:layout_constraintTop_toBottomOf="@+id/caloryprogressbar" />
 
         <ImageButton
-            android:id="@+id/searchimagebutton"
+            android:id="@+id/searchbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_menu_search"
@@ -223,17 +223,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:text="LEFTOVER CALORIES"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.744"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView3" />
-
         <Button
             android:id="@+id/button3"
             android:layout_width="wrap_content"
@@ -243,16 +232,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/editTextText4"
             app:layout_constraintTop_toTopOf="@+id/editTextText4" />
-
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="252dp"
-            android:text="Add calory"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
