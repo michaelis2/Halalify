@@ -11,6 +11,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.lifecycle.ViewModelProvider
+
 
 class caloriehistory : AppCompatActivity() {
 
@@ -19,11 +21,14 @@ class caloriehistory : AppCompatActivity() {
     private lateinit var foodListText: TextView
     private lateinit var totalCaloriesText: TextView
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var SharedViewModel: SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_caloriehistory)
+
+        SharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
 
         // Initialize views
         calendarView = findViewById(R.id.calendarView)
@@ -68,6 +73,7 @@ class caloriehistory : AppCompatActivity() {
                 totalCaloriesText.text = "Total calories: --"
                 e.printStackTrace()
             }
+
     }
 
 
@@ -92,6 +98,8 @@ class caloriehistory : AppCompatActivity() {
 
         foodListText.text = foodList.joinToString("\n")
         totalCaloriesText.text = "Total calories: $totalCalories"
+
+        SharedViewModel.setTotalCalories(totalCalories)
     }
 
     private fun extractCalorieData(querySnapshot: QuerySnapshot): List<Pair<String, Int>> {

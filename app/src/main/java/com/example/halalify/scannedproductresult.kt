@@ -215,7 +215,8 @@ class scannedproductresult : AppCompatActivity() {
                             category,
                             ingredients,
                             halalStatusText,
-                            calorieInfo
+                            calorieInfo,
+                            imageUrl,
                         )
 
 
@@ -233,7 +234,9 @@ class scannedproductresult : AppCompatActivity() {
         category: String,
         ingredients: List<String>,
         halalStatus: String,
-        calories: String
+        calories: String,
+        imageUrl : String
+
     ) {
         val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
             Date()
@@ -245,7 +248,8 @@ class scannedproductresult : AppCompatActivity() {
             "ingredients" to ingredients,
             "halalStatus" to halalStatus,
             "calories" to calories,
-            "timestamp" to timestamp
+            "timestamp" to timestamp,
+            "imageUrl" to imageUrl
         )
         firestore.collection("foodData")
             .add(foodData)

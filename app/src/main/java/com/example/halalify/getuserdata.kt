@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +19,7 @@ class getuserdata : AppCompatActivity() {
     private lateinit var weightEditText: EditText
     private lateinit var heightEditText: EditText
     private lateinit var saveButton: Button
+    private lateinit var RadioGroup: RadioGroup  // Declare the RadioGroup
 
     private val db = FirebaseFirestore.getInstance()  // Initialize Firestore
     private val auth = FirebaseAuth.getInstance()     // Get FirebaseAuth instance
@@ -31,6 +34,7 @@ class getuserdata : AppCompatActivity() {
         weightEditText = findViewById(R.id.getweight)
         heightEditText = findViewById(R.id.getheight)
         saveButton = findViewById(R.id.save_button)
+        RadioGroup = findViewById(R.id.RadioGroup)  // Initialize RadioGroup
 
         // Check if the user is logged in
         val user = auth.currentUser
@@ -51,16 +55,29 @@ class getuserdata : AppCompatActivity() {
         val weight = weightEditText.text.toString().trim()
         val height = heightEditText.text.toString().trim()
 
+        // Check if all fields are filled
         if (username.isEmpty() || age.isEmpty() || weight.isEmpty() || height.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             return
+        }
+
+        // Get selected gender (Men or Women)
+        val selectedGenderId = RadioGroup.checkedRadioButtonId
+        val gender: String = when (selectedGenderId) {
+            R.id.Men -> "Men"
+            R.id.Women -> "Women"
+            else -> {
+                Toast.makeText(this, "Please select a gender", Toast.LENGTH_SHORT).show()
+                return
+            }
         }
 
         val userData = hashMapOf(
             "username" to username,
             "age" to age.toInt(),
             "weight" to weight.toDouble(),
-            "height" to height.toDouble()
+            "height" to height.toDouble(),
+            "gender" to gender  // Add gender to the data being saved
         )
 
         // Store user data in Firestore under a document named with userId
