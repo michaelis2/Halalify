@@ -12,6 +12,8 @@ import com.google.firebase.firestore.QuerySnapshot
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.ViewModelProvider
+import android.util.Log
+
 
 
 class caloriehistory : AppCompatActivity() {
@@ -21,14 +23,14 @@ class caloriehistory : AppCompatActivity() {
     private lateinit var foodListText: TextView
     private lateinit var totalCaloriesText: TextView
     private lateinit var firestore: FirebaseFirestore
-    private lateinit var SharedViewModel: SharedViewModel
+   // private var SharedViewModel: SharedViewModel? = null // Use nullable to avoid crashes
+   private lateinit var SharedViewModel: SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_caloriehistory)
-
-        SharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
+        //SharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
 
         // Initialize views
         calendarView = findViewById(R.id.calendarView)
@@ -65,7 +67,6 @@ class caloriehistory : AppCompatActivity() {
                     totalCaloriesText.text = "Total calories: 0"
                 } else {
                     displayCalorieHistory(querySnapshot)
-                    extractCalorieData(querySnapshot)
                 }
             }
             .addOnFailureListener { e ->
@@ -73,53 +74,22 @@ class caloriehistory : AppCompatActivity() {
                 totalCaloriesText.text = "Total calories: --"
                 e.printStackTrace()
             }
-
     }
 
-
-
     private fun displayCalorieHistory(querySnapshot: QuerySnapshot) {
-        if (querySnapshot.isEmpty) {
-            foodListText.text = "No data for selected date"
-            totalCaloriesText.text = "Total calories: 0"
-            return
-        }
-
         val foodList = mutableListOf<String>()
         var totalCalories = 0
 
         for (document in querySnapshot.documents) {
             val name = document.getString("name") ?: "Unknown Food"
-            val calories = document.getLong("calories")?.toInt() ?: 0 // Use getLong for numeric fields
-
+            val calories = document.getLong("calories")?.toInt() ?: 0
             foodList.add("$name - $calories kcal")
             totalCalories += calories
         }
 
         foodListText.text = foodList.joinToString("\n")
         totalCaloriesText.text = "Total calories: $totalCalories"
-
-        SharedViewModel.setTotalCalories(totalCalories)
-    }
-
-    private fun extractCalorieData(querySnapshot: QuerySnapshot): List<Pair<String, Int>> {
-        if (querySnapshot.isEmpty) {
-            return emptyList()
-        }
-
-        val extractedData = mutableListOf<Pair<String, Int>>()
-
-        for (document in querySnapshot.documents) {
-            val name = document.getString("name") ?: "Unknown Food"
-            val calories = document.getLong("calories")?.toInt() ?: 0 // Use getLong for numeric fields
-            extractedData.add(name to calories) // Pair of food name and calorie count
-        }
-
-        // Optionally log or return the data for external processing
-        extractedData.forEach { (name, calories) ->
-            println("Food: $name, Calories: $calories") // Debugging
-        }
-
-        return extractedData
+        //SharedViewModel.setTotalCalories(totalCalories)
     }
 }
+
