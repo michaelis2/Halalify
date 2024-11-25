@@ -48,6 +48,7 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.foundation.android)
     val camerax_version="1.2.2";
     implementation ("androidx.camera:camera-core:${camerax_version}")
     implementation ("androidx.camera:camera-camera2:${camerax_version}")
@@ -84,6 +85,8 @@ dependencies {
 
     implementation ("com.squareup.okhttp3:okhttp:4.9.3")
     implementation (libs.glide)
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1") // If using annotation processing (optional)
+
 
 
 
