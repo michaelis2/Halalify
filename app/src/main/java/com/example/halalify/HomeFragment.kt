@@ -27,8 +27,8 @@ class HomeFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var sharedViewModel: SharedViewModel
-    private lateinit var progressbar: ProgressBar
-    private lateinit var calorieTextView: TextView
+    //private lateinit var progressbar: ProgressBar
+   // private lateinit var calorieTextView: TextView
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -56,8 +56,8 @@ class HomeFragment : Fragment() {
         val searchBar = binding.textInputEditText
         val searchButton = binding.searchbutton
 
-        progressbar = binding.Prog // Updated to use binding
-        calorieTextView = binding.txtper // Updated to use binding
+        //progressbar = binding.Prog // Updated to use binding
+            //calorieTextView = binding.txtper // Updated to use binding
 
        /*sharedViewModel.totalCalories.observe(viewLifecycleOwner) { totalCalories ->
             updateProgressBar(totalCalories)
@@ -85,6 +85,9 @@ class HomeFragment : Fragment() {
                         }
 
                         val bmr = calculateBMR(gender, age, height, weight)
+                        val intent = Intent(requireContext(), caloriehistory::class.java)
+                        intent.putExtra("BMR_VALUE", bmr)
+
                         binding.basalmetabolicratedisplay.text = "BMR: ${bmr.toInt()} kcal/day"
                     } else {
                         binding.Usernamehome.text = "Document not found"
@@ -112,14 +115,6 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun updateProgressBar(totalCalories: Int) {
-        val maxCalories = 2000
-        progressbar.max = maxCalories
-        progressbar.progress = totalCalories
-        calorieTextView.text = "Calories Today: $totalCalories / $maxCalories"
-
-        Log.d("HomeFragment", "Updated ProgressBar: $totalCalories")
-    }
 
 
     private fun fetchLastThreeFoods(db: FirebaseFirestore) {

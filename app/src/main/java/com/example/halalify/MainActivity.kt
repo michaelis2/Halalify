@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.halalify.databinding.ActivityMainBinding
+import com.example.halalify.SettingFragment
 
 class MainActivity : AppCompatActivity() {
 

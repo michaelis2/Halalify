@@ -26,7 +26,7 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class ScanFragment : Fragment() {
 
@@ -116,7 +116,11 @@ class ScanFragment : Fragment() {
                         Barcode.TYPE_PRODUCT -> {
                             val rawValue = barcode.rawValue
                             Log.d(TAG, "Barcode detected: $rawValue")
-                            Toast.makeText(requireContext(), "Product Barcode: $rawValue", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(),
+                                "Product Barcode: $rawValue",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             saveBarcodeToFirestore(rawValue)
                         }
                         else -> {
