@@ -1,5 +1,6 @@
 package com.example.halalify
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -41,6 +42,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -88,7 +90,8 @@ class HomeFragment : Fragment() {
                         val intent = Intent(requireContext(), caloriehistory::class.java)
                         intent.putExtra("BMR_VALUE", bmr)
 
-                        binding.basalmetabolicratedisplay.text = "BMR: ${bmr.toInt()} kcal/day"
+                        binding.basalmetabolicratedisplay.text = "BMR: %.2f kcal/day".format(bmr)
+
                     } else {
                         binding.Usernamehome.text = "Document not found"
                     }
@@ -109,6 +112,11 @@ class HomeFragment : Fragment() {
                 intent.putExtra("FOOD_QUERY", searchText)
                 startActivity(intent)
             }
+        }
+
+        binding.button3.setOnClickListener {
+            val intent = Intent(requireContext(), caloriehistory::class.java)
+            startActivity(intent)
         }
 
         return view
@@ -174,7 +182,7 @@ class HomeFragment : Fragment() {
         val imageUrl = foodData["imageUrl"] as? String
         val halalstatus = foodData["halalStatus"] as? String
 
-        detailView.text = "$name - $calories kcal, Status: $halalstatus"
+        detailView.text = "$name \n $calories kcal \n Status: $halalstatus"
 
         if (imageUrl != null && imageUrl.isNotEmpty()) {
             Glide.with(this)

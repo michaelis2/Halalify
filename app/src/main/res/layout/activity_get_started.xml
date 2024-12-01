@@ -5,26 +5,32 @@
     android:id="@+id/scannedproduct"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#DBD4CE"
     tools:context=".GetStarted">
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="305dp"
-        android:layout_height="387dp"
+        android:layout_width="367dp"
+        android:layout_height="520dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.168"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        android:src="@drawable/halalify" />
 
     <Button
         android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="492dp"
-        android:text="get started"
+        android:layout_width="146dp"
+        android:layout_height="59dp"
+        android:backgroundTint="@color/blue"
+        android:fontFamily="@font/aoboshi_one"
+        android:text="Get Started"
+        android:textColor="@color/darkpurple"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.764" />
 </androidx.constraintlayout.widget.ConstraintLayout>

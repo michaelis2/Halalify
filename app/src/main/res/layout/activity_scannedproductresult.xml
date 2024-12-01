@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scannedproduct"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/beige"
     android:fillViewport="true"
     tools:context=".scannedproductresult">
 
@@ -16,46 +16,60 @@
 
         <ImageView
             android:id="@+id/imageoffood"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="398dp"
+            android:layout_height="342dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="13dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView18"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.47"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/textView14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_width="217dp"
+            android:layout_height="119dp"
             android:layout_marginEnd="6dp"
+            android:fontFamily="monospace"
             android:text="FOODNAME"
-            app:layout_constraintEnd_toEndOf="@+id/textView18"
-            app:layout_constraintTop_toTopOf="@+id/textView18" />
+            android:textColor="@color/darkpurple"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.169"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.632" />
 
         <TextView
             android:id="@+id/textView18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="19dp"
+            android:layout_width="210dp"
+            android:layout_height="25dp"
             android:layout_marginBottom="32dp"
+            android:fontFamily="monospace"
             android:text="food category"
-            app:layout_constraintBottom_toTopOf="@+id/imageButton4"
-            app:layout_constraintStart_toStartOf="@+id/imageoffood" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.173"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.533" />
 
         <ImageButton
             android:id="@+id/imageButton4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginBottom="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView19"
-            app:layout_constraintStart_toStartOf="@+id/textView19"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.098"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageoffood"
+            app:layout_constraintVertical_bias="0.635"
             app:srcCompat="@android:drawable/btn_star" />
 
         <ImageButton
@@ -64,87 +78,143 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="47dp"
             android:layout_marginBottom="60dp"
-            app:layout_constraintBottom_toTopOf="@+id/button7"
-            app:layout_constraintStart_toStartOf="@+id/button7"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.889"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.582"
             app:srcCompat="@android:drawable/ic_menu_add" />
 
         <TextView
             android:id="@+id/textView19"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="27dp"
-            android:layout_marginBottom="242dp"
+            android:layout_width="210dp"
+            android:layout_height="37dp"
+            android:fontFamily="monospace"
             android:text="HALAL/HARAM STATUS"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.173"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.698" />
 
         <TextView
             android:id="@+id/textView21"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="27dp"
-            android:layout_marginTop="24dp"
+            android:layout_width="231dp"
+            android:layout_height="39dp"
             android:layout_marginEnd="85dp"
+            android:fontFamily="monospace"
             android:text="INGREDIENTS:.."
-            app:layout_constraintEnd_toStartOf="@+id/button7"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.205"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView19" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.766" />
 
         <TextView
             android:id="@+id/textView22"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
+            android:layout_width="225dp"
+            android:layout_height="37dp"
             android:layout_marginBottom="30dp"
+            android:fontFamily="monospace"
             android:text="Ingredient 1"
-            app:layout_constraintBottom_toTopOf="@+id/textView23"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.187"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.86" />
 
         <TextView
             android:id="@+id/textView23"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginBottom="78dp"
+            android:layout_width="226dp"
+            android:layout_height="32dp"
+            android:fontFamily="monospace"
             android:text="Ingredient 2"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.188"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.881" />
 
         <Button
             android:id="@+id/button7"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="100dp"
+            android:layout_width="170dp"
+            android:layout_height="63dp"
+            android:layout_marginStart="284dp"
             android:layout_marginBottom="13dp"
-            android:text="see full ingredient list"
-            app:layout_constraintBottom_toTopOf="@+id/textView22"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView21"
-            app:layout_constraintTop_toTopOf="@+id/textView21" />
+            android:backgroundTint="@color/blue"
+            android:fontFamily="@font/aoboshi_one"
+            android:text="See Full Ingredient"
+            android:textColor="@color/darkpurple"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.8" />
 
         <Button
             android:id="@+id/gobackbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="104dp"
-            android:layout_marginEnd="103dp"
-            android:layout_marginBottom="54dp"
-            android:text="go back"
+            android:layout_width="139dp"
+            android:layout_height="58dp"
+            android:layout_marginStart="284dp"
+            android:layout_marginBottom="36dp"
+            android:backgroundTint="@color/blue"
+            android:fontFamily="@font/aoboshi_one"
+            android:text="Back"
+            android:textColor="@color/darkpurple"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageButton4" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button7"
+            app:layout_constraintVertical_bias="0.311" />
 
         <TextView
             android:id="@+id/calorydisplay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="11dp"
+            android:layout_width="103dp"
+            android:layout_height="71dp"
+            android:fontFamily="monospace"
             android:text="calory:"
-            app:layout_constraintEnd_toEndOf="@+id/addcalorieshistory"
-            app:layout_constraintTop_toBottomOf="@+id/addcalorieshistory" />
+            android:textColor="@color/darkpurple"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.948"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.624" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="35dp"
+            android:layout_height="63dp"
+            android:layout_marginTop="36dp"
+            android:text="-"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="@+id/textView22"
+            app:layout_constraintHorizontal_bias="0.071"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="35dp"
+            android:layout_height="63dp"
+            android:text="-"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="@+id/textView22"
+            app:layout_constraintHorizontal_bias="0.071"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+</ScrollView>
 

@@ -31,9 +31,6 @@
             android:name=".Searchfoodsearchbar"
             android:exported="false" />
         <activity
-            android:name=".Addcalory"
-            android:exported="false" />
-        <activity
             android:name=".caloriehistory"
             android:exported="false" />
         <activity
@@ -60,6 +57,10 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

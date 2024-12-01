@@ -155,7 +155,7 @@ class scannedproductresult : AppCompatActivity() {
                             }
                         }
                     } else {
-                        Log.w("IngredientsParsing", "No ingredients found or ingredients array is empty")
+                        Log.w("IngredientsParsing", "No ingredients found")
                     }
 
                     // Check for haram ingredients
@@ -200,7 +200,7 @@ class scannedproductresult : AppCompatActivity() {
                             ingredient2TextView.visibility = TextView.GONE
                             ingredientsList.text = "No data found"
                         } else {
-                            ingredientsList.text = "Ingredients and Nutrition Info:"
+                            ingredientsList.text = "Ingredients:"
                             if (fullIngredientsList.size > 0) {
                                 ingredient1TextView.text = fullIngredientsList[0]
                                 ingredient1TextView.visibility = TextView.VISIBLE
