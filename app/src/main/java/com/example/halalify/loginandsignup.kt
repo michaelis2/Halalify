@@ -10,21 +10,25 @@ import com.google.firebase.auth.FirebaseAuth
 
 class loginandsignup : AppCompatActivity() {
 
+
+    // Connect to firebase Auth
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Initialize Firebase Auth
+        // Initialize the auth
         auth = FirebaseAuth.getInstance()
 
+        // Initialize views
         val emailEditText = findViewById<EditText>(R.id.editTextTextEmailAddress)
         val passwordEditText = findViewById<EditText>(R.id.editTextTextPassword)
         val loginButton = findViewById<Button>(R.id.button2)
         val signupButton = findViewById<Button>(R.id.button10)
 
         loginButton.setOnClickListener {
+            // Get user credentials
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
@@ -49,7 +53,7 @@ class loginandsignup : AppCompatActivity() {
         signupButton.setOnClickListener {
             val intent = Intent(this, signup::class.java) // Replace with your login activity class
             startActivity(intent)
-            finish() // Optionally finish this activity to prevent going back to signup
+            finish() // Finish this activity to prevent going back to signup
         }
     }
 

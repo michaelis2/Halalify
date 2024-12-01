@@ -15,19 +15,13 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-@Config(manifest = "src/main/AndroidManifest.xml", packageName = "com.example.halalify")
 class SearchProductDisplay {
 
     private lateinit var firestore: FirebaseFirestore
     private lateinit var collectionReference: CollectionReference
     private lateinit var documentReference: DocumentReference
     private lateinit var mockProductData: Map<String, Any>
-
     private lateinit var randomProductId: String
 
     @get:Rule
@@ -51,8 +45,8 @@ class SearchProductDisplay {
         collectionReference = mockk(relaxed = true)
         documentReference = mockk(relaxed = true)
 
-        // Generate a random product ID
-        randomProductId = "00mcrOntYTsKnABnBzOB"  // Mock Firebase random ID
+        // Generate a random product ID (Mock Firebase random ID)
+        randomProductId = "00mcrOntYTsKnABnBzOB"
 
         // Mock the product data
         mockProductData = mapOf(
@@ -72,19 +66,15 @@ class SearchProductDisplay {
         })
     }
 
-
     @Test
     fun testUIElements() {
-        // Use the random productId in the test
-        val productId = randomProductId
-
         // Execute the Firestore query to get product data
-        val task = firestore.collection("products").document(productId).get()
+        val task = firestore.collection("products").document(randomProductId).get()
 
-        // Verify Firestore query was called with the correct parameters
-        verify { collectionReference.document(productId) }
+        // Verify Firestore query was called
+        verify { collectionReference.document(randomProductId) }
 
-        // Assert that the document exists and the data matches
+        // Assert that the document exists and data matches
         assert(task.isSuccessful)
         assert(task.result?.exists() == true)
         assert(task.result?.data == mockProductData)

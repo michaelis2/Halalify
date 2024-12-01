@@ -1,7 +1,6 @@
 package com.example.halalify
 
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -33,8 +32,8 @@ class searchproductresult : AppCompatActivity() {
         val halalStatusTextView = findViewById<TextView>(R.id.textView19)
         val productImageView = findViewById<ImageView>(R.id.imageoffood)
         val addCalorieButton = findViewById<ImageButton>(R.id.addcalorieshistory)
-        val calorieDisplay = findViewById<TextView>(R.id.calorydisplay)  // Assuming you have a TextView for calories
-   // Assuming you have a TextView for food name
+        val calorieDisplay = findViewById<TextView>(R.id.calorydisplay)
+
 
         // Set the data to respective views
         productNameTextView.text = productName

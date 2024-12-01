@@ -5,11 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
-import com.example.halalify.databinding.FragmentHomeBinding
 import com.example.halalify.databinding.FragmentSettingBinding
 
 private const val ARG_PARAM1 = "param1"
@@ -22,14 +20,11 @@ private const val ARG_PARAM2 = "param2"
  */
 class SettingFragment : Fragment() {
 
-    private lateinit var displayHeight: TextView
-    private lateinit var displayWeight: TextView
-    private lateinit var displayAge: TextView
-    private lateinit var displayGender: TextView
-    private lateinit var displayUsername: TextView
 
     private var param1: String? = null
     private var param2: String? = null
+
+    //  Initialize binding
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +43,7 @@ class SettingFragment : Fragment() {
     ): View? {
 
         _binding = FragmentSettingBinding.inflate(inflater, container, false) // Initialize binding
-        fetchUserData() // Ensure binding is initialized before calling this
+        fetchUserData()
         return binding.root // Use the root view from binding
     }
 
@@ -70,7 +65,7 @@ class SettingFragment : Fragment() {
                             val height = document.getLong("height")?.toInt()?.toString() ?: "Height not set"
                             val weight = document.getLong("weight")?.toInt()?.toString() ?: "Weight not set"
 
-                            // Safely update UI using binding
+                            // Update UI using binding
                             binding.apply {
                                 textView2.text = username
                                 displaygender.text = gender

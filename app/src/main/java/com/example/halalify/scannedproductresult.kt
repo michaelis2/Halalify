@@ -50,6 +50,7 @@ class scannedproductresult : AppCompatActivity() {
         calorieDisplay = findViewById(R.id.calorydisplay)
 
 
+        // Add product calorie to the calorie history when button click
         val calorieHistoryButton = findViewById<ImageButton>(R.id.addcalorieshistory)
         calorieHistoryButton.setOnClickListener {
             val intent = Intent(this, caloriehistory::class.java)
@@ -60,6 +61,7 @@ class scannedproductresult : AppCompatActivity() {
         }
 
 
+        // See the fully parsed ingredients from scanned product
         val seeIngredientsButton = findViewById<Button>(R.id.button7)
         seeIngredientsButton.setOnClickListener {
             val fullData = fullIngredientsList.joinToString("\n")
@@ -69,11 +71,11 @@ class scannedproductresult : AppCompatActivity() {
         }
 
 
-        // Retrieve barcode from Intent extras
+        // Retrieve barcode from Intent
         val barcode = intent.getStringExtra("barcode")
 
         if (barcode != null) {
-            fetchProductInfoFromAPI(barcode)
+            fetchProductInfoFromAPI(barcode) // Sent barcode to the API parsing function
         } else {
             Toast.makeText(this, "No barcode found", Toast.LENGTH_SHORT).show()
         }
@@ -86,18 +88,22 @@ class scannedproductresult : AppCompatActivity() {
         goBackButton.setOnClickListener {
             finish()
         }
-        // Retrieve and display the latest scanned barcode information
-        // getLatestBarcodeAndFetchProductInfo()
 
     }
 
 
+    // Function to fetch product information using OpenFoodFacts API
     private fun fetchProductInfoFromAPI(barcode: String) {
+        // URL of the OpenFoodFacts API endpoint with the barcode of the product
         val url = "https://world.openfoodfacts.org/api/v0/product/$barcode.json"
         val client = OkHttpClient()
 
+        // Create a request to fetch product data
         val request = Request.Builder().url(url).build()
+
+        // Make an asynchronous request to the API
         client.newCall(request).enqueue(object : Callback {
+            // Callback for failed request
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
                     Toast.makeText(
@@ -108,6 +114,7 @@ class scannedproductresult : AppCompatActivity() {
                 }
             }
 
+            // Callback for successful request
             override fun onResponse(call: Call, response: Response) {
                 response.body?.let { responseBody ->
                     val jsonData = responseBody.string()
@@ -115,11 +122,12 @@ class scannedproductresult : AppCompatActivity() {
 
                     if (!jsonObject.has("product")) {
                         runOnUiThread {
+                            // Show an alert if product is unavailable
                             AlertDialog.Builder(this@scannedproductresult)
                                 .setTitle("Product Unavailable")
                                 .setMessage("Food product unavailable")
                                 .setPositiveButton("OK") { _, _ ->
-                                    finish()
+                                    finish()  // Close the activity if no product data
                                 }
                                 .setCancelable(false)
                                 .show()
@@ -127,8 +135,8 @@ class scannedproductresult : AppCompatActivity() {
                         return
                     }
 
+                    // Extract product details
                     val product = jsonObject.getJSONObject("product")
-
                     val name = product.optString("product_name", "N/A")
                     val category = product.optJSONArray("categories_tags")?.optString(0) ?: "N/A"
 
@@ -138,15 +146,14 @@ class scannedproductresult : AppCompatActivity() {
                     if (ingredientsArray != null && ingredientsArray.length() > 0) {
                         for (i in 0 until ingredientsArray.length()) {
                             try {
-                                // Safely get each ingredient object
+                                // Get each ingredient object
                                 val ingredientObject = ingredientsArray.optJSONObject(i)
 
                                 if (ingredientObject != null) {
-                                    // Safely get the "text" key from the ingredient object
                                     val ingredientName = ingredientObject.optString("text", "Unknown Ingredient")
                                     ingredients.add(ingredientName)
                                 } else {
-                                    // Log or handle null ingredient objects
+                                    // Handle null ingredient objects
                                     Log.w("IngredientsParsing", "Null ingredient object at index $i")
                                 }
                             } catch (e: Exception) {
@@ -159,12 +166,12 @@ class scannedproductresult : AppCompatActivity() {
                     }
 
                     // Check for haram ingredients
-                    // val containsHaram = HaramIngredientsUtility.checkHaramStatus(ingredients)
                     val halalStatusText = when {
                         ingredients.isEmpty() -> "Unknown" // No ingredients available
-                        HaramIngredientsUtility.checkHaramStatus(ingredients) -> "Haram"
+                        HaramIngredientsUtility.checkHaramStatus(ingredients) -> "Non-Halal"
                         else -> "Halal"
                     }
+
                     // Nutritional information parsing
                     val nutriments = product.optJSONObject("nutriments")
                     val calorieInfo =
@@ -180,10 +187,9 @@ class scannedproductresult : AppCompatActivity() {
 
                         nutritionInfo.addAll(listOf(protein, carbs, fats, energy))
 
-
                     }
 
-
+                    // Update UI with product details
                     runOnUiThread {
                         foodName.text = name
                         foodCategory.text = category
@@ -215,6 +221,7 @@ class scannedproductresult : AppCompatActivity() {
                             }
                         }
 
+                        // Load product image using Glide
                         val imageUrl = product.optString("image_url", "")
                         if (imageUrl.isNotEmpty()) {
                             Glide.with(this@scannedproductresult)
@@ -240,6 +247,7 @@ class scannedproductresult : AppCompatActivity() {
 
     }
 
+    // Function to save food product data to Firestore
     private fun saveFoodDataToFirestore(
         barcode: String,
         name: String,
@@ -253,6 +261,7 @@ class scannedproductresult : AppCompatActivity() {
         val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
             Date()
         )
+        // Prepare data to save in Firestore
         val foodData = hashMapOf(
             "barcode" to barcode,
             "name" to name,
@@ -263,6 +272,8 @@ class scannedproductresult : AppCompatActivity() {
             "timestamp" to timestamp,
             "imageUrl" to imageUrl
         )
+
+        // Save food data to Firestore collection
         firestore.collection("foodData")
             .add(foodData)
             .addOnSuccessListener {
@@ -273,6 +284,7 @@ class scannedproductresult : AppCompatActivity() {
             }
     }
 
+    // Function to save calorie data to Firestore for calorie history
     private fun saveCalorieDataToFirestore() {
         if (calorieDisplay.text.isNotEmpty() && foodName.text.isNotEmpty()) {
             val calorieText = calorieDisplay.text.toString()
