@@ -6,4 +6,5 @@
     <item name="caloriesforeachfood" type="id" />
     <item name="getselecteddate" type="id" />
     <item name="foodlistanditscaloriesview" type="id" />
+    <item name="imageCaptureButton" type="id" />
 </resources>

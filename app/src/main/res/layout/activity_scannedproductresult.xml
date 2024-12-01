@@ -62,15 +62,18 @@
 
         <ImageButton
             android:id="@+id/imageButton4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="52dp"
+            android:layout_height="50dp"
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:scaleType="fitCenter"
+            android:src="@drawable/exclamation"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.098"
+            app:layout_constraintHorizontal_bias="0.086"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageoffood"
-            app:layout_constraintVertical_bias="0.635"
-            app:srcCompat="@android:drawable/btn_star" />
+            app:layout_constraintVertical_bias="0.641" />
 
         <ImageButton
             android:id="@+id/addcalorieshistory"
@@ -139,16 +142,16 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.188"
+            app:layout_constraintHorizontal_bias="0.172"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.881" />
+            app:layout_constraintVertical_bias="0.871" />
 
         <Button
             android:id="@+id/button7"
             android:layout_width="170dp"
             android:layout_height="63dp"
-            android:layout_marginStart="284dp"
+            android:layout_marginStart="260dp"
             android:layout_marginBottom="13dp"
             android:backgroundTint="@color/blue"
             android:fontFamily="@font/aoboshi_one"
