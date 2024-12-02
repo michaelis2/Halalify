@@ -9,15 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.ProgressBar
 import com.google.firebase.firestore.Query
-import com.google.android.material.textfield.TextInputEditText
 import com.example.halalify.databinding.FragmentHomeBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.bumptech.glide.Glide
-import androidx.lifecycle.ViewModelProvider
-import android.util.Log
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -26,11 +22,6 @@ class HomeFragment : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
-
-    private lateinit var sharedViewModel: SharedViewModel
-    //private lateinit var progressbar: ProgressBar
-   // private lateinit var calorieTextView: TextView
-
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -50,23 +41,16 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        //sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-
+        // Initialize firestore and current user
         val db = FirebaseFirestore.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
 
+        // Initialize search components
         val searchBar = binding.textInputEditText
         val searchButton = binding.searchbutton
 
-        //progressbar = binding.Prog // Updated to use binding
-            //calorieTextView = binding.txtper // Updated to use binding
 
-       /*sharedViewModel.totalCalories.observe(viewLifecycleOwner) { totalCalories ->
-            updateProgressBar(totalCalories)
-        }*/
-
-
-
+        //Get data of current user from firestore under the users collection
         if (currentUser != null) {
             val userId = currentUser.uid
 
@@ -90,9 +74,11 @@ class HomeFragment : Fragment() {
                         val intent = Intent(requireContext(), caloriehistory::class.java)
                         intent.putExtra("BMR_VALUE", bmr)
 
+                        //display BMR
                         binding.basalmetabolicratedisplay.text = "BMR: %.2f kcal/day".format(bmr)
 
                     } else {
+                        //display username
                         binding.Usernamehome.text = "Document not found"
                     }
                 }
@@ -106,6 +92,7 @@ class HomeFragment : Fragment() {
         }
 
         searchButton.setOnClickListener {
+            // Get string from the search bar
             val searchText = searchBar.text.toString()
             if (searchText.isNotEmpty()) {
                 val intent = Intent(requireContext(), Searchfoodsearchbar::class.java)
@@ -113,7 +100,7 @@ class HomeFragment : Fragment() {
                 startActivity(intent)
             }
         }
-
+         // Button to go to calorie history page
         binding.button3.setOnClickListener {
             val intent = Intent(requireContext(), caloriehistory::class.java)
             startActivity(intent)
@@ -123,8 +110,7 @@ class HomeFragment : Fragment() {
     }
 
 
-
-
+    // Get the last 3 Scanned foods from the firestore database
     private fun fetchLastThreeFoods(db: FirebaseFirestore) {
         val foodDataRef = db.collection("foodData")
 
@@ -142,6 +128,7 @@ class HomeFragment : Fragment() {
             }
     }
 
+    // Ensure scanned foods history exists
     private fun updateFoodUI(foodList: List<Map<String, Any>?>) {
         if (foodList.isEmpty()) {
             hideFoodSection()
@@ -170,6 +157,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    // Display the data of the previous scanned food
     private fun updateFoodCard(
         foodData: Map<String, Any>?,
         imageView: ImageView,
@@ -197,6 +185,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    // Hide image and detail if empty history
     private fun hideFoodSection() {
         binding.FoodImage1.visibility = View.GONE
         binding.fooddetail1.visibility = View.GONE
@@ -206,6 +195,7 @@ class HomeFragment : Fragment() {
         binding.fooddetail3.visibility = View.GONE
     }
 
+    // to calculate the BMR
     private fun calculateBMR(gender: String, age: Int, height: Int, weight: Int): Double {
         return if (gender.equals("Women", ignoreCase = true)) {
             447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)
@@ -213,6 +203,8 @@ class HomeFragment : Fragment() {
             88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
         }
     }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

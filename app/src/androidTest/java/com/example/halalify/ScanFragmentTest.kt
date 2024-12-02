@@ -1,107 +1,82 @@
-/*package com.example.halalify
+package com.example.halalify
 
 import android.Manifest
-import android.net.Uri
-import androidx.camera.core.ImageCapture
-import androidx.camera.lifecycle.ProcessCameraProvider
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import androidx.test.core.app.ActivityScenario
-import com.example.halalify.ScanFragment
-import androidx.fragment.app.FragmentActivity
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.rule.GrantPermissionRule
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
-import io.mockk.*
-import org.junit.After
+import androidx.test.espresso.idling.CountingIdlingResource
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.lifecycle.Lifecycle
-import java.util.concurrent.CompletableFuture
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Rule
+import org.junit.runner.RunWith
+import androidx.test.filters.MediumTest
+import androidx.test.rule.ActivityTestRule
 
+@RunWith(AndroidJUnit4::class)
+@MediumTest
 class ScanFragmentTest {
 
     @get:Rule
-    val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
-
-    @get:Rule
-    val activityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
-    // Mock Firestore
-    private lateinit var firestore: FirebaseFirestore
-    private lateinit var collection: CollectionReference
+    var activityRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
+    private lateinit var idlingResource: CountingIdlingResource
     @Before
     fun setUp() {
-        // Initialize mocks
-        MockKAnnotations.init(this)
+        // Launch the activity that hosts the fragment
+        ActivityScenario.launch(MainActivity::class.java)
 
-        // Mock Firestore and CollectionReference
-        firestore = mockk()
-        collection = mockk()
+        // Switch to the Scan fragment
+        onView(withId(R.id.Scan)).perform(click())
 
-        // Mock the behavior of Firestore collection
-        every { firestore.collection("barcodes") } returns collection
-        every { collection.add(any()) } returns mockk()
-    }
-
-
-
-    @Test
-    fun testCameraInitializationAndPhotoCapture() {ActivityScenario.launch(MainActivity::class.java)
-        val scenario = launchFragmentInContainer<ScanFragment>()
-        scenario.onFragment { fragment ->
-            // Verify that the camera preview is displayed
-            onView(withId(R.id.viewFinder)).check(matches(isDisplayed()))
-            scenario.moveToState(Lifecycle.State.RESUMED)
-
-            // Click the capture button
-            onView(withId(R.id.image_capture_button)).perform(click())
-
-            // Verify that an image capture is triggered
-            val mockImageCapture: ImageCapture = mockk(relaxed = true)
-            val mockFile =
-                Uri.parse("/Users/amandairawan/StudioProjects/halalify/app/src/main/res/drawable/halalify.png")
-
-            every {
-                mockImageCapture.takePicture(any(), any(), any<ImageCapture.OnImageSavedCallback>())
-            } answers {
-                thirdArg<ImageCapture.OnImageSavedCallback>().onImageSaved(
-                    ImageCapture.OutputFileResults(mockFile)
-                )
-            }
-            verify { mockImageCapture.takePicture(any(), any(), any()) }
-
-        }
+        idlingResource = CountingIdlingResource("Camera Permission Request")
     }
 
     @Test
-    fun testBarcodeDetectionAndFirestoreSaving() {
-        // Launch the ScanFragment
-        val scenario = launchFragmentInContainer<ScanFragment>()
+    fun testFragmentIsDisplayed() {
+        // Check if the ScanFragment is displayed
+        onView(withId(R.id.frameLayout2)).check(matches(isDisplayed()))
+    }
 
-        scenario.onFragment { fragment ->
-            // Mock Firestore behavior inside the fragment
-            val barcodeValue = "1234567890"
-            val data = hashMapOf("barcode" to barcodeValue)
+    @Test
+    fun testCameraButtonIsClickable() {
+        // Check if the camera capture button is clickable
+        onView(withId(R.id.image_capture_button)).check(matches(isDisplayed()))
+        onView(withId(R.id.image_capture_button)).perform(click())
+         }
 
-            every {
-                firestore.collection("barcodes").add(data)
-            } returns mockk()
+    @Test
+    fun testPermissions() {
+        // Test camera permissions
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val permissionStatus = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
 
-            // Simulate a button click to trigger barcode saving
-            onView(withId(R.id.image_capture_button)).perform(click())
+        // Check if permission is denied
+        if (permissionStatus == PackageManager.PERMISSION_DENIED) {
+            // Assuming permission is denied initially, request it
 
-            // Verify that the barcode value is saved to Firestore
-            verify { firestore.collection("barcodes").add(any()) }
+            // Launch the activity to simulate the permission request
+            ActivityScenario.launch(MainActivity::class.java)
+
+            // Increment IdlingResource to handle async behavior
+            idlingResource.increment()
+
+            // Wait for the permission request process to complete
+            Espresso.registerIdlingResources(idlingResource)
+
+            // Simulate the permission grant (or check if permission is granted now)
+            val newPermissionStatus = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+
+            assert(newPermissionStatus == PackageManager.PERMISSION_GRANTED)
+
+            // Decrement the IdlingResource
+            idlingResource.decrement()
         }
     }
-    @After
-    fun tearDown() {
-        unmockkAll() // Unmock all objects and static methods
     }
-}
-*/

@@ -1,5 +1,4 @@
 import android.content.Intent
-import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.espresso.Espresso.onView
@@ -52,7 +51,7 @@ class SearchProductDisplay {
         collectionReference = mockk(relaxed = true)
         documentReference = mockk(relaxed = true)
 
-        // Generate a random product ID (Mock Firebase random ID)
+        // Generate a random product ID
         randomProductId = "00mcrOntYTsKnABnBzOB"  // Mock Firebase random ID
 
         // Mock the product data

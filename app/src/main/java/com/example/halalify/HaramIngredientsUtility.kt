@@ -8,15 +8,29 @@ object HaramIngredientsUtility {
         "Gelatin (pork)",
         "Gelatin",
         "Lard",
-        "Rennet (non-halal)",
+        "Rennet",
         "Carnitine",
         "Vanillin (alcohol-based)",
+        "Vanillin",
         "Pork",
-        "Vegetable Oil",
         "Bacon",
         "Whey",
-        "Pepsin"
-
+        "Pepsin",
+        "Ethanol",
+        "Wine",
+        "Been",
+        "Liquor",
+        "Blood plasma",
+        "Blood sausage",
+        "Lecithin",
+        "Animal Shortening",
+        "Glycerol (Glycerine)",
+        "Hormones",
+        "Cochineal (Carmine)",
+        "Rum",
+        "Casein",
+        "L-cysteine",
+        "Cysteine",
 
     )
 

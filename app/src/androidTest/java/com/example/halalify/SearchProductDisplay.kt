@@ -22,7 +22,6 @@ class SearchProductDisplay {
     private lateinit var collectionReference: CollectionReference
     private lateinit var documentReference: DocumentReference
     private lateinit var mockProductData: Map<String, Any>
-
     private lateinit var randomProductId: String
 
     @get:Rule

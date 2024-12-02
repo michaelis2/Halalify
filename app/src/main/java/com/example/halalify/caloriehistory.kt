@@ -11,8 +11,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import java.text.SimpleDateFormat
 import java.util.*
-import androidx.lifecycle.ViewModelProvider
-import android.util.Log
 import android.widget.ProgressBar
 
 
@@ -26,15 +24,15 @@ class caloriehistory : AppCompatActivity() {
     private lateinit var progressText: TextView
     private lateinit var firestore: FirebaseFirestore
     private var bmrValue: Int = 2500 // Default value
-   // private var SharedViewModel: SharedViewModel? = null // Use nullable to avoid crashes
-   private lateinit var SharedViewModel: SharedViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_caloriehistory)
-        //SharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
-        val bmrValue = intent.getIntExtra("BMR_VALUE", 2500)
+
+        bmrValue = intent.getIntExtra("BMR_VALUE", 2500)
+
         // Initialize views
         calendarView = findViewById(R.id.calendarView)
         selectedDateText = findViewById(R.id.getselecteddate)
@@ -43,6 +41,7 @@ class caloriehistory : AppCompatActivity() {
         progressBar = findViewById(R.id.Prog)
         progressText = findViewById(R.id.txtper)
 
+        // Initialize firestore
         firestore = FirebaseFirestore.getInstance()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -51,7 +50,7 @@ class caloriehistory : AppCompatActivity() {
             insets
         }
 
-        // Handle date selection
+        // Handle date selection from calendar
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val selectedDate = Calendar.getInstance()
             selectedDate.set(year, month, dayOfMonth)
@@ -62,6 +61,7 @@ class caloriehistory : AppCompatActivity() {
         }
     }
 
+    // Get the food data from firestore
     private fun fetchCalorieHistory(date: String) {
         firestore.collection("calorieHistory")
             .whereEqualTo("timestamp", date)
@@ -81,6 +81,8 @@ class caloriehistory : AppCompatActivity() {
             }
     }
 
+
+    // Display the data from firestore
     private fun displayCalorieHistory(querySnapshot: QuerySnapshot) {
         val foodList = mutableListOf<String>()
         var totalCalories = 0
@@ -94,10 +96,11 @@ class caloriehistory : AppCompatActivity() {
 
         foodListText.text = foodList.joinToString("\n")
         totalCaloriesText.text = "Total calories: $totalCalories"
-        //SharedViewModel.setTotalCalories(totalCalories)
+
         updateProgressBar(totalCalories)
     }
 
+    // Update the percentage on the progress bar
     private fun updateProgressBar(calories: Int)  {
         // Calculate the progress percentage
         val percentage = (calories / bmrValue.toDouble()  * 100).toInt().coerceIn(0, 100)

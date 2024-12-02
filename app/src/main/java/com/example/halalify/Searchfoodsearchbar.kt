@@ -32,16 +32,20 @@ class Searchfoodsearchbar : AppCompatActivity() {
             insets
         }
 
+        // Initialize search bar and the button
         val searchBar = findViewById<EditText>(R.id.editTextText7)
         val searchButton = findViewById<ImageButton>(R.id.imageButton6)
 
+        // Get initial keyword from the home fragment
         val initialSearchQuery = intent.getStringExtra("FOOD_QUERY") ?: ""
 
+        // Set the initial keyword in the search bar and fetch suggestions
         if (initialSearchQuery.isNotEmpty()) {
             searchBar.setText(initialSearchQuery)
             fetchFoodSuggestions(initialSearchQuery)
         }
 
+        // When the search button is clicked, fetch suggestions for the entered query
         searchButton.setOnClickListener {
             val newQuery = searchBar.text.toString().trim()
             if (newQuery.isNotEmpty()) {
@@ -52,22 +56,28 @@ class Searchfoodsearchbar : AppCompatActivity() {
         }
     }
 
+
+    // Fetches food suggestions based on the search query
     private fun fetchFoodSuggestions(query: String) {
         val apiUrl = "https://world.openfoodfacts.org/cgi/search.pl?search_terms=$query&search_simple=1&action=process&json=1"
 
+
+        // Use Coroutine to perform network operation in the background
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val url = URL(apiUrl)
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
 
+                // Check if the request was successful
                 if (connection.responseCode == 200) {
                     val response = connection.inputStream.bufferedReader().readText()
                     val suggestions = parseSearchResponse(response)
 
+                    // Switch back to the main thread to update the UI
                     withContext(Dispatchers.Main) {
                         if (suggestions.isNotEmpty()) {
-                            displaySuggestions(suggestions)
+                            displaySuggestions(suggestions) // Display suggestions in the UI
                         } else {
                             Toast.makeText(this@Searchfoodsearchbar, "No matching products found", Toast.LENGTH_SHORT).show()
                         }
@@ -80,16 +90,21 @@ class Searchfoodsearchbar : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
+                    // Show error message if an exception occurs
                     Toast.makeText(this@Searchfoodsearchbar, "An error occurred: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
+
+    // Displays food suggestions in the UI
     private fun displaySuggestions(suggestions: List<Map<String, String>>) {
         val resultContainer = findViewById<LinearLayout>(R.id.resultContainer)
-        resultContainer.removeAllViews()
+        resultContainer.removeAllViews() // Clear any existing views
 
+
+        // Iterate through each suggestion and create a view for it
         for (suggestion in suggestions) {
             val productName = suggestion["productName"] ?: "Unknown Product"
             val calories = suggestion["calories"] ?: "Unknown"
@@ -97,11 +112,14 @@ class Searchfoodsearchbar : AppCompatActivity() {
             val category = suggestion["category"] ?: "N/A"
             val halalStatus = suggestion["halalStatus"] ?: "Unknown"
 
+
+            // Create a layout for each suggestion
             val suggestionView = LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
                 setPadding(16, 16, 16, 16)
             }
 
+            // Initialize an ImageView for the product image and load it using Glide
             val imageView = ImageView(this).apply {
                 layoutParams = LinearLayout.LayoutParams(150, 150)
             }
@@ -115,10 +133,10 @@ class Searchfoodsearchbar : AppCompatActivity() {
                     // On click, pass the product details to the result activity
                     val intent = Intent(this@Searchfoodsearchbar, searchproductresult::class.java)
                     intent.putExtra("product_name", productName)
-                    intent.putExtra("calories", calories)  // Pass calories to the result activity
+                    intent.putExtra("calories", calories)
                     intent.putExtra("product_image", productImage)
-                    intent.putExtra("category", category)  // Pass category
-                    intent.putExtra("halal_status", halalStatus)  // Pass halal status
+                    intent.putExtra("category", category)
+                    intent.putExtra("halal_status", halalStatus)
 
                     startActivity(intent)
                 }
@@ -132,7 +150,7 @@ class Searchfoodsearchbar : AppCompatActivity() {
 
 
 
-
+    // Parses the response from the OpenFoodFacts API and returns a list of product suggestions
     private fun parseSearchResponse(response: String): List<Map<String, String>> {
         val jsonObject = JSONObject(response)
         val productsArray = jsonObject.optJSONArray("products") ?: return emptyList()
@@ -169,7 +187,7 @@ class Searchfoodsearchbar : AppCompatActivity() {
                 else -> "Halal"
             }
 
-            // Add the product information to the suggestions list as a Map
+            // Add the product information to the suggestions list
             if (productId.isNotEmpty()) {
                 val productInfo = mapOf(
                     "productName" to productName,

@@ -8,13 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.halalify.databinding.ActivityMainBinding
-import com.example.halalify.SettingFragment
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     companion object {
-        const val REQUEST_CODE_CAMERA = 1
         val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
     }
 
@@ -53,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             activityResultLauncher.launch(REQUIRED_PERMISSIONS)
         }
 
-        // Set initial fragment to be displayed
+
         if (savedInstanceState == null) {
             replaceFragment(HomeFragment())  // Default fragment on app launch
         }
@@ -62,15 +61,15 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.Home -> {
-                    replaceFragment(HomeFragment())  // Replace with Home fragment
+                    replaceFragment(HomeFragment())
                     true
                 }
                 R.id.Scan -> {
-                    replaceFragment(ScanFragment())  // Replace with Scan fragment
+                    replaceFragment(ScanFragment())
                     true
                 }
                 R.id.Settings -> {
-                    replaceFragment(SettingFragment())  // Replace with Settings fragment
+                    replaceFragment(SettingFragment())
                     true
                 }
                 else -> false
@@ -92,9 +91,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Start the camera functionality (this can be updated to integrate CameraX or other camera API)
+    // Start the camera functionality
     private fun startCamera() {
-        // Logic to start the camera (like initializing CameraX or other camera APIs)
         Toast.makeText(this, "Camera started", Toast.LENGTH_SHORT).show()
     }
 }

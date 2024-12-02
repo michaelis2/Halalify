@@ -16,7 +16,7 @@ class signup : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Manually initialize Firebase
+        // Initialize Firebase
         FirebaseApp.initializeApp(this)
 
         setContentView(R.layout.activity_signup)
@@ -68,7 +68,7 @@ class signup : AppCompatActivity() {
         loginButton.setOnClickListener {
             val intent = Intent(this, loginandsignup::class.java) // Replace with your login activity class
             startActivity(intent)
-            finish() // Optionally finish this activity to prevent going back to signup
+            finish() // Finish this activity to prevent going back to signup
         }
     }
 }

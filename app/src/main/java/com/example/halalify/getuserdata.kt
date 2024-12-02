@@ -14,12 +14,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class getuserdata : AppCompatActivity() {
 
+    // Initialize variables
     private lateinit var usernameEditText: EditText
     private lateinit var ageEditText: EditText
     private lateinit var weightEditText: EditText
     private lateinit var heightEditText: EditText
     private lateinit var saveButton: Button
-    private lateinit var RadioGroup: RadioGroup  // Declare the RadioGroup
+    private lateinit var RadioGroup: RadioGroup
 
     private val db = FirebaseFirestore.getInstance()  // Initialize Firestore
     private val auth = FirebaseAuth.getInstance()     // Get FirebaseAuth instance
@@ -34,7 +35,7 @@ class getuserdata : AppCompatActivity() {
         weightEditText = findViewById(R.id.getweight)
         heightEditText = findViewById(R.id.getheight)
         saveButton = findViewById(R.id.save_button)
-        RadioGroup = findViewById(R.id.RadioGroup)  // Initialize RadioGroup
+        RadioGroup = findViewById(R.id.RadioGroup)
 
         // Check if the user is logged in
         val user = auth.currentUser
@@ -49,6 +50,7 @@ class getuserdata : AppCompatActivity() {
         }
     }
 
+    // Save user input data to firestore
     private fun saveUserData(userId: String) {
         val username = usernameEditText.text.toString().trim()
         val age = ageEditText.text.toString().trim()
@@ -72,12 +74,13 @@ class getuserdata : AppCompatActivity() {
             }
         }
 
+        // Compile the datas
         val userData = hashMapOf(
             "username" to username,
             "age" to age.toInt(),
             "weight" to weight.toDouble(),
             "height" to height.toDouble(),
-            "gender" to gender  // Add gender to the data being saved
+            "gender" to gender
         )
 
         // Store user data in Firestore under a document named with userId
@@ -86,13 +89,15 @@ class getuserdata : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // If task is successful
                     Toast.makeText(this, "Data saved successfully", Toast.LENGTH_SHORT).show()
-                    // Create an intent to navigate to MainActivity
+
+                    // Intent to navigate to MainActivity
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
 
-                    // Optionally, close the current activity so the user can't return to it
+                    // Close the current activity so the user can't return to it
                     finish()
                 } else {
+                    
                     // If task fails, print the exception
                     val exception = task.exception
                     Log.e("getuserdata", "Failed to save data: ${exception?.message}")

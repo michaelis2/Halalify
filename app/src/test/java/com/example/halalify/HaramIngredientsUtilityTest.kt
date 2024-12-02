@@ -1,8 +1,6 @@
 package com.example.halalify
 
 import org.junit.jupiter.api.Assertions.*
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
 
 class HaramIngredientsUtilityTest {
