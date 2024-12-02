@@ -88,3 +88,9 @@
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!-- 
+  Progress bar layout adapted from GeeksforGeeks:
+  https://www.geeksforgeeks.org/
+  Used with permission under the Creative Commons License.
+-->
