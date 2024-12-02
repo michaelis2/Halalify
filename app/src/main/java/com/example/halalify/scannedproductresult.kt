@@ -155,14 +155,14 @@ class scannedproductresult : AppCompatActivity() {
                             }
                         }
                     } else {
-                        Log.w("IngredientsParsing", "No ingredients found or ingredients array is empty")
+                        Log.w("IngredientsParsing", "No ingredients found")
                     }
 
                     // Check for haram ingredients
                     // val containsHaram = HaramIngredientsUtility.checkHaramStatus(ingredients)
                     val halalStatusText = when {
                         ingredients.isEmpty() -> "Unknown" // No ingredients available
-                        HaramIngredientsUtility.checkHaramStatus(ingredients) -> "Haram"
+                        HaramIngredientsUtility.checkHaramStatus(ingredients) -> "Non-Halal"
                         else -> "Halal"
                     }
                     // Nutritional information parsing
@@ -200,7 +200,7 @@ class scannedproductresult : AppCompatActivity() {
                             ingredient2TextView.visibility = TextView.GONE
                             ingredientsList.text = "No data found"
                         } else {
-                            ingredientsList.text = "Ingredients and Nutrition Info:"
+                            ingredientsList.text = "Ingredients:"
                             if (fullIngredientsList.size > 0) {
                                 ingredient1TextView.text = fullIngredientsList[0]
                                 ingredient1TextView.visibility = TextView.VISIBLE

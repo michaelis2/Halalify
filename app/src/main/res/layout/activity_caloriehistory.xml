@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/beige"
     tools:context=".caloriehistory">
 
     <CalendarView
@@ -12,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="31dp"
+        android:background="#F0EBE7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -19,39 +21,70 @@
         android:id="@+id/getselecteddate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="67dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="monospace"
         android:text="OCTOBER 1 2004"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView" />
 
     <TextView
         android:id="@+id/foodlistanditscaloriesview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="42dp"
+        android:layout_width="298dp"
+        android:layout_height="294dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="monospace"
         android:text="food list"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/getselecteddate" />
-
-    <TextView
-        android:id="@+id/caloriesforeachfood"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="42dp"
-        android:text="CALORIES"
-        app:layout_constraintStart_toStartOf="@+id/totalcaloriesthatdat"
-        app:layout_constraintTop_toBottomOf="@+id/totalcaloriesthatdat" />
 
     <TextView
         android:id="@+id/totalcaloriesthatdat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="67dp"
-        android:layout_marginEnd="56dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="40dp"
+        android:fontFamily="monospace"
         android:text="Total calories :xx"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+
+    <LinearLayout
+        android:layout_width="331dp"
+        android:layout_height="310dp"
+        android:layout_marginBottom="72dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ProgressBar
+            android:id="@+id/Prog"
+            android:layout_width="308dp"
+            android:layout_height="252dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:indeterminateOnly="false"
+            android:progress="75"
+            android:progressDrawable="@drawable/circle" />
+
+        <TextView
+            android:textColor="@color/beige"
+            android:id="@+id/txtper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="75%"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

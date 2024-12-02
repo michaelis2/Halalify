@@ -19,8 +19,12 @@
         android:layout_marginLeft="50dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="50dp"
+        android:backgroundTint="@color/blue"
         android:elevation="2dp"
+        android:fontFamily="@font/aoboshi_one"
         android:text="@string/take_photo"
+        android:textColorLink="@color/blue"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />

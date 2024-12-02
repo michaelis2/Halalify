@@ -165,7 +165,7 @@ class Searchfoodsearchbar : AppCompatActivity() {
 
             val halalStatusText = when {
                 ingredients.isEmpty() -> "Unknown" // No ingredients available
-                HaramIngredientsUtility.checkHaramStatus(ingredients) -> "Haram"
+                HaramIngredientsUtility.checkHaramStatus(ingredients) -> "Non-Halal"
                 else -> "Halal"
             }
 

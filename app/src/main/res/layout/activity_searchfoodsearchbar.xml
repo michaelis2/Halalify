@@ -5,34 +5,40 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#DBD4CE"
     tools:context=".Searchfoodsearchbar">
 
     <!-- Search bar at the top -->
+
+    <!-- Container for dynamically added search results -->
+
     <EditText
         android:id="@+id/editTextText7"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="13dp"
+        android:layout_width="313dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="15dp"
-        android:hint="Search"
+        android:background="#D4E5EF"
+        android:backgroundTint="#F0EBE7"
+        android:fontFamily="@font/aoboshi_one"
+        android:hint="search food product"
         android:inputType="text"
+        android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/imageButton6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/imageButton6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="15dp"
+        android:layout_width="83dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="12dp"
+        android:background="#D4E5EF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/editTextText7"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_search" />
 
-    <!-- Container for dynamically added search results -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"

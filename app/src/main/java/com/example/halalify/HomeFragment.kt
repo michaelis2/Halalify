@@ -1,5 +1,6 @@
 package com.example.halalify
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -27,8 +28,8 @@ class HomeFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var sharedViewModel: SharedViewModel
-    private lateinit var progressbar: ProgressBar
-    private lateinit var calorieTextView: TextView
+    //private lateinit var progressbar: ProgressBar
+   // private lateinit var calorieTextView: TextView
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -41,6 +42,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,8 +58,8 @@ class HomeFragment : Fragment() {
         val searchBar = binding.textInputEditText
         val searchButton = binding.searchbutton
 
-        progressbar = binding.Prog // Updated to use binding
-        calorieTextView = binding.txtper // Updated to use binding
+        //progressbar = binding.Prog // Updated to use binding
+            //calorieTextView = binding.txtper // Updated to use binding
 
        /*sharedViewModel.totalCalories.observe(viewLifecycleOwner) { totalCalories ->
             updateProgressBar(totalCalories)
@@ -85,7 +87,11 @@ class HomeFragment : Fragment() {
                         }
 
                         val bmr = calculateBMR(gender, age, height, weight)
-                        binding.basalmetabolicratedisplay.text = "BMR: ${bmr.toInt()} kcal/day"
+                        val intent = Intent(requireContext(), caloriehistory::class.java)
+                        intent.putExtra("BMR_VALUE", bmr)
+
+                        binding.basalmetabolicratedisplay.text = "BMR: %.2f kcal/day".format(bmr)
+
                     } else {
                         binding.Usernamehome.text = "Document not found"
                     }
@@ -108,18 +114,15 @@ class HomeFragment : Fragment() {
             }
         }
 
+        binding.button3.setOnClickListener {
+            val intent = Intent(requireContext(), caloriehistory::class.java)
+            startActivity(intent)
+        }
+
         return view
     }
 
 
-    private fun updateProgressBar(totalCalories: Int) {
-        val maxCalories = 2000
-        progressbar.max = maxCalories
-        progressbar.progress = totalCalories
-        calorieTextView.text = "Calories Today: $totalCalories / $maxCalories"
-
-        Log.d("HomeFragment", "Updated ProgressBar: $totalCalories")
-    }
 
 
     private fun fetchLastThreeFoods(db: FirebaseFirestore) {
@@ -179,7 +182,7 @@ class HomeFragment : Fragment() {
         val imageUrl = foodData["imageUrl"] as? String
         val halalstatus = foodData["halalStatus"] as? String
 
-        detailView.text = "$name - $calories kcal, Status: $halalstatus"
+        detailView.text = "$name \n $calories kcal \n Status: $halalstatus"
 
         if (imageUrl != null && imageUrl.isNotEmpty()) {
             Glide.with(this)

@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.ViewModelProvider
 import android.util.Log
-
+import android.widget.ProgressBar
 
 
 class caloriehistory : AppCompatActivity() {
@@ -22,7 +22,10 @@ class caloriehistory : AppCompatActivity() {
     private lateinit var selectedDateText: TextView
     private lateinit var foodListText: TextView
     private lateinit var totalCaloriesText: TextView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var progressText: TextView
     private lateinit var firestore: FirebaseFirestore
+    private var bmrValue: Int = 2500 // Default value
    // private var SharedViewModel: SharedViewModel? = null // Use nullable to avoid crashes
    private lateinit var SharedViewModel: SharedViewModel
 
@@ -31,12 +34,14 @@ class caloriehistory : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_caloriehistory)
         //SharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
-
+        val bmrValue = intent.getIntExtra("BMR_VALUE", 2500)
         // Initialize views
         calendarView = findViewById(R.id.calendarView)
         selectedDateText = findViewById(R.id.getselecteddate)
         foodListText = findViewById(R.id.foodlistanditscaloriesview)
         totalCaloriesText = findViewById(R.id.totalcaloriesthatdat)
+        progressBar = findViewById(R.id.Prog)
+        progressText = findViewById(R.id.txtper)
 
         firestore = FirebaseFirestore.getInstance()
 
@@ -90,6 +95,14 @@ class caloriehistory : AppCompatActivity() {
         foodListText.text = foodList.joinToString("\n")
         totalCaloriesText.text = "Total calories: $totalCalories"
         //SharedViewModel.setTotalCalories(totalCalories)
+        updateProgressBar(totalCalories)
+    }
+
+    private fun updateProgressBar(calories: Int)  {
+        // Calculate the progress percentage
+        val percentage = (calories / bmrValue.toDouble()  * 100).toInt().coerceIn(0, 100)
+        progressBar.progress = percentage
+        progressText.text = "$percentage%"
     }
 }
 
