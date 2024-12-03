@@ -66,7 +66,7 @@ class signup : AppCompatActivity() {
 
         // Set up listener for the login button to navigate to the login activity
         loginButton.setOnClickListener {
-            val intent = Intent(this, loginandsignup::class.java) // Replace with your login activity class
+            val intent = Intent(this, loginandsignup::class.java) 
             startActivity(intent)
             finish() // Finish this activity to prevent going back to signup
         }
